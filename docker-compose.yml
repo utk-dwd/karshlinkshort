@@ -1,0 +1,42 @@
+
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: linksh-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: linksh
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - linksh-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: linksh-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - linksh-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: linksh-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@linksh.dev
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    networks:
+      - linksh-network
+
+volumes:
+  postgres_data:
+
+networks:
+  linksh-network:
+    driver: bridge
